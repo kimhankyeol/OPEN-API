@@ -3,8 +3,10 @@ import org.apache.http.HttpHeaders;
 import org.apache.http.HttpResponse;
 import org.apache.http.NameValuePair;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.ResponseHandler;
 import org.apache.http.client.entity.UrlEncodedFormEntity;
 import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.BasicResponseHandler;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.apache.http.message.BasicNameValuePair;
 import java.util.ArrayList;
@@ -22,11 +24,7 @@ public class KakaoVisionAPI  {
             HttpPost postRequest = new HttpPost(urlString); //POST 메소드 URL 생성
             postRequest.addHeader(HttpHeaders.AUTHORIZATION,userCredentials);
             //헤더 추가
-//            HttpHeaders.AUTHORIZATION
-//            postRequest.setHeader("Content-Type","application/x-www-form-urlencoded");
-//            postRequest.setHeader("Accept", "x-www-form-urlencoded;charset=utf-8");
-//            postRequest.setHeader("Connection", "keep-alive");
-            postRequest.addHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            postRequest.setHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
 
 
             List<NameValuePair> param = new ArrayList<NameValuePair>();
@@ -43,14 +41,15 @@ public class KakaoVisionAPI  {
             System.out.println(response.getStatusLine());
             System.out.println(response.toString());
 
-
-//            if (response.getStatusLine().getStatusCode() == 200) {
-//                ResponseHandler<String> handler = new BasicResponseHandler();
-//                String body = handler.handleResponse(response);
-//                System.out.println(body);
-//            } else {
-//                System.out.println("response is error : " + response.getStatusLine().getStatusCode());
-//            }
+            //결과 상태가 200 이면 성공
+            if (response.getStatusLine().getStatusCode() == 200) {
+                ResponseHandler<String> handler = new BasicResponseHandler();
+                //결과 body 꺼내옴
+                String body = handler.handleResponse(response);
+                System.out.println(body);
+            } else {
+                System.out.println("response is error : " + response.getStatusLine().getStatusCode());
+            }
 
         } catch (Exception e){
             System.err.println(e.toString());

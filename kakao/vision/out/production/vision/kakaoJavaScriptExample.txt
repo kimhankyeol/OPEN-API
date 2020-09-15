@@ -1,0 +1,19 @@
+ajax 로 카카오 비전 api 호출하는 함수이다.
+
+function kakao(){
+            $.ajax({
+                url:"https://dapi.kakao.com/v2/vision/face/detect",
+                method:"post",
+                data:{
+                    "image_url":"https://img4.yna.co.kr/photo/cms/2019/05/02/02/PCM20190502000402370_P2.jpg",
+                    "threshold":"0.7"
+                },
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader("Content-type","application/x-www-form-urlencoded");
+                    xhr.setRequestHeader("Authorization","KakaoAK {appKey}" );
+                },
+                success:function(resp){
+                    console.table(resp);
+                }
+            })
+        }
