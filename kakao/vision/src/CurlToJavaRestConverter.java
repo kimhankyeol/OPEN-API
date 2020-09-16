@@ -20,7 +20,7 @@ public class CurlToJavaRestConverter {
     private String methodType;
     private List<NameValuePair> params;
     //결과 담을 스트링 변수
-    private String body;
+    private String body="";
 
     //생성자 오버로딩
     public CurlToJavaRestConverter(String urlString, String apiKey, String userCredentials, String contentType, String methodType, List<NameValuePair> params) {
@@ -59,10 +59,32 @@ public class CurlToJavaRestConverter {
                 System.err.println(e.toString());
             }
         }
-        return this.body;
+    
     }else{
     //method get일떄
+         try {
+                HttpClient client = HttpClientBuilder.create().build();            // 전송방식 HttpGet, HttpPost방식
+                HttpGet getRequest = new HttpGet(this.urlString); //GET 메소드 URL 생성
+             //헤더가 있을수도 없을수도 있기때문에 분기처리 해주는것도 좋을듯
+                getRequest.addHeader(HttpHeaders.AUTHORIZATION, this.userCredentials);
+                getRequest.setHeader("Content-Type", this.contentType);
+                getRequest.setEntity(new UrlEncodedFormEntity(this.params));
+
+                // 응답처리
+                HttpResponse response = client.execute(getRequest);
+                //결과 상태가 200 이면 성공 200 이 아니면 실패
+                if (response.getStatusLine().getStatusCode() != 200) {
+                    System.out.println("response is error : " + response.getStatusLine().getStatusCode());
+                } else {
+                    ResponseHandler<String> handler = new BasicResponseHandler();
+                    //결과 body 꺼내옴
+                    this.body = handler.handleResponse(response);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.err.println(e.toString());
+            }
     
     }
-
+    return this.body;
 }
