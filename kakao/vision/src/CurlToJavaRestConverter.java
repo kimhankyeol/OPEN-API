@@ -19,6 +19,8 @@ public class CurlToJavaRestConverter {
     private String contentType;
     private String methodType;
     private List<NameValuePair> params;
+    //결과 담을 스트링 변수
+    private String body;
 
     //생성자 오버로딩
     public CurlToJavaRestConverter(String urlString, String apiKey, String userCredentials, String contentType, String methodType, List<NameValuePair> params) {
@@ -30,11 +32,11 @@ public class CurlToJavaRestConverter {
         this.params = params;
     }
 
-    //method post 일때
+    
     //예외처리
     public String restAPI() throws IOException {
-        String body = "";
         if (this.methodType.equalsIgnoreCase("POST")) {
+            //method post 일때
             try {
                 HttpClient client = HttpClientBuilder.create().build();            // 전송방식 HttpGet, HttpPost방식
                 HttpPost postRequest = new HttpPost(this.urlString); //POST 메소드 URL 생성
@@ -50,14 +52,17 @@ public class CurlToJavaRestConverter {
                 } else {
                     ResponseHandler<String> handler = new BasicResponseHandler();
                     //결과 body 꺼내옴
-                    body = handler.handleResponse(response);
+                    this.body = handler.handleResponse(response);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
                 System.err.println(e.toString());
             }
         }
-        return body;
+        return this.body;
+    }else{
+    //method get일떄
+    
     }
 
 }
