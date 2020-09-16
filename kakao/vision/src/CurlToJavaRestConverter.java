@@ -34,7 +34,7 @@ public class CurlToJavaRestConverter {
     }
 
     
-    //예외처리
+  //예외처리
     public String restAPI() throws IOException {
         if (this.methodType.equalsIgnoreCase("POST")) {
             //method post 일때
@@ -59,9 +59,7 @@ public class CurlToJavaRestConverter {
                 e.printStackTrace();
                 System.err.println(e.toString());
             }
-        }
-    
-    }else{
+        }else{
     //method get일떄
          try {
                 HttpClient client = HttpClientBuilder.create().build();            // 전송방식 HttpGet, HttpPost방식
@@ -69,7 +67,7 @@ public class CurlToJavaRestConverter {
              //헤더가 있을수도 없을수도 있기때문에 분기처리 해주는것도 좋을듯
                 getRequest.addHeader(HttpHeaders.AUTHORIZATION, this.userCredentials);
                 getRequest.setHeader("Content-Type", this.contentType);
-                getRequest.setEntity(new UrlEncodedFormEntity(this.params));
+                getRequest.setParams(new UrlEncodedFormEntity(this.params));
 
                 // 응답처리
                 HttpResponse response = client.execute(getRequest);
