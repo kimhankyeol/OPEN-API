@@ -12,7 +12,6 @@ import org.apache.http.impl.client.HttpClientBuilder;
 
 import java.io.IOException;
 import java.util.List;
-//KAKAO REST API 공통 호출 클래스
 public class CurlToJavaRestConverter {
     private String urlString;
     private String apiKey;
@@ -33,8 +32,8 @@ public class CurlToJavaRestConverter {
         this.params = params;
     }
 
-    
- //예외처리
+
+    //예외처리
     public String restAPI() throws IOException {
         if (this.methodType.equalsIgnoreCase("POST")) {
             //method post 일때
@@ -60,13 +59,14 @@ public class CurlToJavaRestConverter {
                 System.err.println(e.toString());
             }
         }else{
-    //method get일떄
-         try {
+            //method get일떄
+            try {
                 HttpClient client = HttpClientBuilder.create().build();            // 전송방식 HttpGet, HttpPost방식
-                HttpGet getRequest = new HttpGet(this.urlString+"?"+ URLEncodedUtils.format(this.params, "UTF-8")); //GET 메소드 URL 생성
-             //헤더가 있을수도 없을수도 있기때문에 분기처리 해주는것도 좋을듯
-                getRequest.addHeader(HttpHeaders.AUTHORIZATION, this.userCredentials);
-                getRequest.setHeader("Content-Type", this.contentType);
+                HttpGet getRequest = new HttpGet(this.urlString+"?"+ URLEncodedUtils.format(this.params, "UTF-8")+"&serviceKey="+this.apiKey); //GET 메소드 URL 생성
+                System.out.println(getRequest.getRequestLine());
+                //헤더가 있을수도 없을수도 있기때문에 분기처리 해주는것도 좋을듯
+//                getRequest.addHeader(HttpHeaders.AUTHORIZATION, this.userCredentials);
+//                getRequest.setHeader("Content-Type", this.contentType);
 
                 // 응답처리
                 HttpResponse response = client.execute(getRequest);
@@ -83,7 +83,7 @@ public class CurlToJavaRestConverter {
                 System.err.println(e.toString());
             }
         }
-    return this.body;
+        return this.body;
     }
-    
+
 }
